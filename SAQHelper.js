@@ -1,13 +1,29 @@
 jQuery('.resultats_product').each(function(){
 	var nbsp = String.fromCharCode(160);
 	var Desc = jQuery(this).find('.desc').text();
+
 	var UnitIndex = Desc.indexOf(nbsp + 'ml');
-	if(UnitIndex == -1) return;
-	Desc = Desc.substr(0, UnitIndex);
-	Desc = Desc.substr(Desc.lastIndexOf(','));
-	var MiddleIndex = Desc.indexOf(nbsp + 'X' + nbsp);
-	var Quantity = parseInt(Desc.substr(2, MiddleIndex-2));
-	var Format = parseInt(Desc.substr(MiddleIndex + 3));
+	if(UnitIndex != -1)
+	{
+		Desc = Desc.substr(0, UnitIndex);
+		Desc = Desc.substr(Desc.lastIndexOf(','));
+		var MiddleIndex = Desc.indexOf(nbsp + 'X' + nbsp);
+		var Quantity = parseInt(Desc.substr(2, MiddleIndex-2));
+		var Format = parseFloat(Desc.substr(MiddleIndex + 3));
+	}
+	else
+	{
+		UnitIndex = Desc.indexOf(nbsp + 'L');
+		if(UnitIndex != -1)
+		{
+			Quantity = 1;
+			Desc = Desc.substr(0, UnitIndex);
+			Desc = Desc.substr(Desc.lastIndexOf(','));
+			Format = parseFloat(Desc.substr(1, Desc.length - 1)) * 1000;
+		}
+		else
+			return;
+	}
 
 	var PriceText = jQuery(this).find('.price').text();
 	var Price = parseFloat(PriceText.substr(0, PriceText.length - 2));
