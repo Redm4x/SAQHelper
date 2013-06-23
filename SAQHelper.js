@@ -29,6 +29,10 @@ jQuery('.resultats_product').each(function(){
 	var Price = parseFloat(PriceText.substr(0, PriceText.length - 2));
 
 	var URL = jQuery(this).find('a').first().attr('href');
+
+	if(location.protocol == 'https:' && URL.substr(0, 5) != 'https')
+		URL = 'https' + URL.substr(4);
+	
 	jQuery(this).find('.desc').append('<div class="Math" style="font-size: small;"></div>')
 	Calcul(Price, Quantity, Format, URL, jQuery(this).find('.Math').first());
 });
