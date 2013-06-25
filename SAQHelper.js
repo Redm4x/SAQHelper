@@ -1,3 +1,8 @@
+function ParseFloat(num)
+{
+	return parseFloat(num.replace(',', '.'));
+}
+
 jQuery('.resultats_product').each(function(){
 	var nbsp = String.fromCharCode(160);
 	var Desc = jQuery(this).find('.desc').text();
@@ -8,8 +13,18 @@ jQuery('.resultats_product').each(function(){
 		Desc = Desc.substr(0, UnitIndex);
 		Desc = Desc.substr(Desc.lastIndexOf(','));
 		var MiddleIndex = Desc.indexOf(nbsp + 'X' + nbsp);
-		var Quantity = parseInt(Desc.substr(2, MiddleIndex-2));
-		var Format = parseFloat(Desc.substr(MiddleIndex + 3));
+		if(MiddleIndex == -1)
+		{
+			Quantity = 1;
+			Format = ParseFloat(Desc.substr(2));
+		}
+		else
+		{
+			var Quantity = parseInt(Desc.substr(2, MiddleIndex-2));
+			var Format = ParseFloat(Desc.substr(MiddleIndex + 3));
+		}
+		
+		console.log(Quantity + " * " + Format);
 	}
 	else
 	{
@@ -19,14 +34,14 @@ jQuery('.resultats_product').each(function(){
 			Quantity = 1;
 			Desc = Desc.substr(0, UnitIndex);
 			Desc = Desc.substr(Desc.lastIndexOf(','));
-			Format = parseFloat(Desc.substr(1, Desc.length - 1)) * 1000;
+			Format = ParseFloat(Desc.substr(1, Desc.length - 1)) * 1000;
 		}
 		else
 			return;
 	}
 
 	var PriceText = jQuery(this).find('.price').text();
-	var Price = parseFloat(PriceText.substr(0, PriceText.length - 2));
+	var Price = ParseFloat(PriceText.substr(0, PriceText.length - 2));
 
 	var URL = jQuery(this).find('a').first().attr('href');
 
@@ -34,20 +49,20 @@ jQuery('.resultats_product').each(function(){
 		URL = 'https' + URL.substr(4);
 	
 	jQuery(this).find('.desc').append('<div class="Math" style="font-size: small;"></div>')
-	Calcul(Price, Quantity, Format, URL, jQuery(this).find('.Math').first());
+	Compute(Price, Quantity, Format, URL, jQuery(this).find('.Math').first());
 });
 
-function Calcul(Price, Quantity, Format, URL, Elem)
+function Compute(Price, Quantity, Format, URL, Elem)
 {
 	jQuery.get(URL, function(rep){
-		var PourcentageIndex = rep.indexOf('&nbsp;%</span>');
-		var Pourcentage = rep.substr(0,PourcentageIndex);
-		Pourcentage = Pourcentage.substr(Pourcentage.lastIndexOf('>')+1);
-		Pourcentage = parseInt(Pourcentage);
+		var PercentageIndex = rep.indexOf('&nbsp;%</span>');
+		var Percentage = rep.substr(0,PercentageIndex);
+		Percentage = Percentage.substr(Percentage.lastIndexOf('>')+1);
+		Percentage = ParseFloat(Percentage);
 
-		var NbConso = Quantity * Format * Pourcentage / 355 / 5;
+		var NbConso = Quantity * Format * Percentage / 355 / 5;
 		var CostByConso = Price / NbConso;
-		Elem.html('<br/>Nombre de conso : ' + NbConso.toFixed(2));
+		Elem.html('<br/>Nombre de conso : ' + NbConso.toFixed(2) + "("+Percentage+")");
 		Elem.append('<br/>Coût par conso : ' + CostByConso.toFixed(2) + "$");
 	});
 }
