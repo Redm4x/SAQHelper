@@ -62,7 +62,7 @@ function Compute(Price, Quantity, Format, URL, Elem)
 
 		var NbConso = Quantity * Format * Percentage / 355 / 5;
 		var CostByConso = Price / NbConso;
-		Elem.html('<br/>Nombre de conso : ' + NbConso.toFixed(2) + "("+Percentage+")");
+		Elem.html('<br/>Nombre de conso : ' + NbConso.toFixed(2));
 		Elem.append('<br/>Coût par conso : ' + CostByConso.toFixed(2) + "$");
 	});
 }
