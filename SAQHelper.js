@@ -11,7 +11,7 @@ jQuery('.resultats_product').each(function(){
 	if(UnitIndex != -1)
 	{
 		Desc = Desc.substr(0, UnitIndex);
-		Desc = Desc.substr(Desc.lastIndexOf(','));
+		Desc = Desc.substr(Desc.lastIndexOf(','+nbsp));
 		var MiddleIndex = Desc.indexOf(nbsp + 'X' + nbsp);
 		if(MiddleIndex == -1)
 		{
@@ -23,8 +23,6 @@ jQuery('.resultats_product').each(function(){
 			var Quantity = parseInt(Desc.substr(2, MiddleIndex-2));
 			var Format = ParseFloat(Desc.substr(MiddleIndex + 3));
 		}
-		
-		console.log(Quantity + " * " + Format);
 	}
 	else
 	{
@@ -33,7 +31,7 @@ jQuery('.resultats_product').each(function(){
 		{
 			Quantity = 1;
 			Desc = Desc.substr(0, UnitIndex);
-			Desc = Desc.substr(Desc.lastIndexOf(','));
+			Desc = Desc.substr(Desc.lastIndexOf(','+nbsp));
 			Format = ParseFloat(Desc.substr(1, Desc.length - 1)) * 1000;
 		}
 		else
